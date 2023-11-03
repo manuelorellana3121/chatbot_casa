@@ -4,10 +4,10 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { BotsModule } from './bots/bots.module';
-import { QuestionsModule } from './questions/questions.module';
+import { InstructionsModule } from './instructions/instructions.module';
 
 @Module({
-  imports: [UsersModule, ProfilesModule, BotsModule, QuestionsModule],
+  imports: [UsersModule, ProfilesModule, BotsModule, InstructionsModule],
   controllers: [AppController],
   providers: [AppService],
 })

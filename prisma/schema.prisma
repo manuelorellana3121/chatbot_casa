@@ -44,7 +44,7 @@ model Bot {
   id Int @id @default(autoincrement())
   name String
   description String?
-  questions Question[]
+  instructions Instruction[]
 
   Profile Profile @relation(fields: [profileId], references: [id])
   profileId Int 
@@ -55,10 +55,10 @@ model Bot {
   @@map("bots")
 }
 
-model Question {
+model Instruction {
   id Int @id @default(autoincrement())
-  ask String
-  answer String
+  instruction String
+  action Action[]
 
   Bot Bot @relation(fields: [botId], references: [id])
   botId Int
@@ -66,5 +66,16 @@ model Question {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("questions")
+  @@map("instructions")
+}
+
+model Action {
+  id Int @id @default(autoincrement())
+  action String
+
+  Instruction Instruction @relation(fields: [instructionId], references: [id])
+  instructionId Int @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
