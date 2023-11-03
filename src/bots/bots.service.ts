@@ -25,12 +25,12 @@ export class BotsService {
         id
       },
       include: {
-        questions: true
+        instructions: true
       }
     });
   }
 
-  async update(id: number, updateBotDto: UpdateBotDto): Promise<Bot | null> {
+  async update(id: number, updateBotDto: Prisma.BotUpdateInput): Promise<Bot | null> {
     return await this.prismaService.bot.update({
       where: {
         id
