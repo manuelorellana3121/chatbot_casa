@@ -1,5 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -29,7 +27,7 @@ model Profile {
   mobile String?
   bots Bot[]
 
-  User User @relation(fields: [userId], references: [id])
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int @unique
 
 
@@ -46,7 +44,7 @@ model Bot {
   description String?
   instructions Instruction[]
 
-  Profile Profile @relation(fields: [profileId], references: [id])
+  Profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId Int 
 
   createdAt DateTime @default(now())
@@ -60,7 +58,7 @@ model Instruction {
   instruction String
   action Action[]
 
-  Bot Bot @relation(fields: [botId], references: [id])
+  Bot Bot @relation(fields: [botId], references: [id], onDelete: Cascade)
   botId Int
 
   createdAt DateTime @default(now())
@@ -73,11 +71,22 @@ model Action {
   id Int @id @default(autoincrement())
   action String
 
-  Instruction Instruction @relation(fields: [instructionId], references: [id])
-  instructionId Int @unique
+  Instruction Instruction @relation(fields: [instructionId], references: [id], onDelete: Cascade)
+  instructionId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("actions")
 }
+
+//todavía tengo que buscar como se hace el log de operaciones
+// model Log {
+//   id Int @id @default(autoincrement())
+//   user Int
+//   instruction Int
+//   description String
+
+
+//   @@map("logs")
+// }

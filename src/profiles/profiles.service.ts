@@ -7,6 +7,14 @@ import { Profile, Prisma } from '@prisma/client';
 export class ProfilesService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async create(createProfileDto: Prisma.ProfileCreateInput): Promise<Profile | null> {
+    return await this.prismaService.profile.create({
+      data: {
+        ...createProfileDto
+      }
+    })
+  }
+
   async findAll(): Promise<Profile[] | null> {
     return await this.prismaService.profile.findMany({
       include: {

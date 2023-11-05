@@ -6,6 +6,11 @@ import { Prisma } from '@prisma/client';
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
+  @Post()
+  create(@Body() createProfileDto: Prisma.ProfileCreateInput){
+    return this.profilesService.create(createProfileDto)
+  }
+
   @Get()
   findAll() {
     return this.profilesService.findAll();
