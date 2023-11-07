@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { InstructionsService } from './instructions.service';
 import { Prisma } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth-guard';
 
 @Controller('instructions')
+@UseGuards(AuthGuard)
 export class InstructionsController {
   constructor(private readonly instructionsService: InstructionsService) {}
 

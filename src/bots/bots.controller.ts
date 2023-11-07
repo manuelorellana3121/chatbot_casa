@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { BotsService } from './bots.service';
 import { UpdateBotDto } from './dto/update-bot.dto';
 import { Prisma } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth-guard';
 
 @Controller('bots')
+@UseGuards(AuthGuard)
 export class BotsController {
   constructor(private readonly botsService: BotsService) {}
 

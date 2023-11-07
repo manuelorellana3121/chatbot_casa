@@ -7,9 +7,13 @@ import { BotsModule } from './bots/bots.module';
 import { InstructionsModule } from './instructions/instructions.module';
 import { ActionsModule } from './actions/actions.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
     UsersModule, 
     ProfilesModule, 
     BotsModule, 

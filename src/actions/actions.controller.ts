@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ActionsService } from './actions.service';
 import { Prisma } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth-guard';
 
 @Controller('actions')
+@UseGuards(AuthGuard)
 export class ActionsController {
   constructor(private readonly actionsService: ActionsService) {}
 
