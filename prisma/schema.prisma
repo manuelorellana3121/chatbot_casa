@@ -83,10 +83,10 @@ model Action {
 //todavía tengo que buscar como se hace el log de operaciones
 // model Log {
 //   id Int @id @default(autoincrement())
-//   user Int
-//   instruction Int
-//   description String
-
+//   userId Int
+//   botId Int
+//   instructionId Int
+//   date DateTime @default(now())
 
 //   @@map("logs")
 // }
