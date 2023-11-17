@@ -1,16 +1,10 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt'
 import { PrismaService } from 'src/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-
-  //debo encriptarle la contraseña ✔
-  //Tambien debo hacer que funcione la autenticación de JWT pero eso sería en auth
-  //Buscar como funcionan los exception filters y los guards para que no se caiga el servidor por errores en el tipeado
-  //Puede ser que utilice try catch para las validaciones a su vez
 
 export class AuthService {
   constructor(
@@ -18,7 +12,8 @@ export class AuthService {
     private readonly jwtService: JwtService
     ) {}
 
-  async login(createAuthDto: CreateAuthDto) {
+  async login(createAuthDto: CreateAuthDto): Promise<Object | null> {
+    
     const { email, password } = createAuthDto
     const findUser = await this.prismaService.user.findFirst({
       where: {

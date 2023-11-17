@@ -1,37 +1,42 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FlowChatDto } from './dto/create-chat.dto';
 import { PrismaService } from 'src/prisma.service';
-import { Action, Bot, Instruction } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
+import { error } from 'console';
 
 @Injectable()
 export class ChatService {
-  constructor (private readonly prismaService: PrismaService) {}
+  constructor (
+    private readonly prismaService: PrismaService,
+    private readonly jwtService: JwtService
+    ) {}
 
-//voy a crear algo parecido a la pantalla de bot pero que enste
-//solo me traiga los datos necesarios de los bots y sus acciones podría ser
-
-//Si le coloco Promise<Bot[] | null> no me funciona... """Preguntar"""
-
-  async showBots() {
-    const botsList = await this.prismaService.bot.findMany({
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        instructions: {
-          select: {
-            id: true,
-            instruction: true,
+  async showBots(): Promise<Object | null> {
+    try {
+      const botsList = await this.prismaService.bot.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          instructions: {
+            select: {
+              id: true,
+              instruction: true,
+            }
           }
         }
-      }
-    })
+      })
+  
+      if (!botsList) throw new error
 
-    return botsList
+      return botsList
+    } catch (error) {
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST)
+    }
   }
 
-// mismo que el anterior... """Preguntar"""
-  async chatFlow(id: number , flowChatDto: FlowChatDto) {
+  async chatFlow(id: number , flowChatDto: FlowChatDto): Promise<Object | null> {
+        
     const findOneBot = await this.prismaService.bot.findFirst({
       where: {
         id
@@ -48,16 +53,32 @@ export class ChatService {
 
     if (!findInstructionByName) throw new HttpException("Instruction not found",404)
 
-    return( console.log("Saludos soy el bot:", findOneBot.name),
-      await this.prismaService.action.findFirst({
-        where: {
-          instructionId: findInstructionByName.id
-        },
-        select: {
-          id: true,
-          action: true
-        }
-      })
+    const botAction = await this.prismaService.action.findFirst({
+      where: {
+        instructionId: findInstructionByName.id
+      },
+      select: {
+        id: true,
+        action: true
+      }
+    })
+
+    return( /*console.log("Saludos soy el bot:", findOneBot.name),*/
+      botAction
     ) 
+  }
+
+  //En la clase del sabado te pregunto porque no supe donde debería colocar este metodo (si en el controller o en la funcion de arriba) para que reciba los parametros que se van a guardar en la tabla de Logs
+  async chatLogs(userId: number, botId: number, instructionId: number, inputInstruction: string): Promise<void> {
+    await this.prismaService.log.create({
+      data: {
+        userId: userId,
+        botId: botId,
+        instructionId: instructionId,
+        instruction: inputInstruction,
+        date: new Date()
+      }
+    })
+    
   }
 }

@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, Delete, ParseIntPipe, UseGuard
 import { ProfilesService } from './profiles.service';
 import { Prisma } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth-guard';
+import { CreateProfileDto } from './dto/createProfile.dto';
 
 @Controller('profiles')
 @UseGuards(AuthGuard)
@@ -9,7 +10,7 @@ export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @Post()
-  create(@Body() createProfileDto: Prisma.ProfileCreateInput){
+  create(@Body() createProfileDto: CreateProfileDto){
     return this.profilesService.create(createProfileDto)
   }
 
